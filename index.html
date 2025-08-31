@@ -24,8 +24,9 @@
             --message-bg: #1a1a1a;
             --user-message-bg: #333333;
             --toggle-off: #4a4a4a;
-            --toggle-on: #6366f1;
+            --toggle-on: #4a4a4a;
             --toggle-slider: #ffffff;
+            --toast-bg: #2a2a2a;
         }
 
         body {
@@ -348,6 +349,55 @@
             transform: scale(0.95);
         }
 
+        /* Loading Animation */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s linear infinite;
+            margin-bottom: 12px;
+        }
+
+        .loading-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .loading-progress {
+            width: 200px;
+            height: 4px;
+            background-color: var(--bg-tertiary);
+            border-radius: 2px;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+
+        .loading-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #cccccc);
+            border-radius: 2px;
+            width: 0%;
+            animation: loadingProgress 3s ease-in-out infinite;
+        }
+
+        @keyframes loadingProgress {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
         /* Input Area - Redesigned with better alignment */
         .input-area {
             position: fixed;
@@ -381,7 +431,7 @@
 
         .input-wrapper:focus-within {
             border-color: var(--toggle-on);
-            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
         }
 
         .prompt-input {
@@ -435,7 +485,7 @@
         .send-btn {
             width: 36px;
             height: 36px;
-            background: linear-gradient(135deg, var(--toggle-on), #818cf8);
+            background: linear-gradient(135deg, var(--accent), #cccccc);
             color: var(--bg-primary);
             border: none;
             border-radius: 50%;
@@ -450,7 +500,7 @@
 
         .send-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
         }
 
         .send-btn:active {
@@ -583,7 +633,7 @@
 
         .setting-input:focus {
             border-color: var(--toggle-on);
-            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
         }
 
         .dimension-options {
@@ -608,7 +658,7 @@
         }
 
         .dimension-btn.active {
-            background: linear-gradient(135deg, var(--toggle-on), #818cf8);
+            background: linear-gradient(135deg, var(--toggle-on), #f0f0f0);
             color: var(--bg-primary);
             border-color: var(--toggle-on);
             transform: scale(1.02);
@@ -679,7 +729,7 @@
             bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: var(--bg-tertiary);
+            background-color: var(--toast-bg);
             color: var(--text-primary);
             padding: 12px 24px;
             border-radius: 24px;
@@ -709,16 +759,6 @@
                 transform: translate(-50%, 0);
                 opacity: 1;
             }
-        }
-
-        .toast.error {
-            background: linear-gradient(135deg, #ff3333, #ff6666);
-            color: white;
-        }
-
-        .toast.success {
-            background: linear-gradient(135deg, #33cc33, #66dd66);
-            color: white;
         }
 
         /* Touch-friendly buttons */
@@ -849,23 +889,23 @@
             <div class="setting-group">
                 <label class="setting-label">Rasio Aspek</label>
                 <div class="dimension-options">
-                    <button class="dimension-btn active" onclick="selectDimension(this, 512, 512, '1:1')">
+                    <button class="dimension-btn active" onclick="selectDimension(this, 1080, 1080, '1:1')">
                         1:1
                     </button>
-                    <button class="dimension-btn" onclick="selectDimension(this, 512, 768, '3:4')">
+                    <button class="dimension-btn" onclick="selectDimension(this, 1080, 1440, '3:4')">
                         3:4
                     </button>
-                    <button class="dimension-btn" onclick="selectDimension(this, 768, 512, '4:3')">
+                    <button class="dimension-btn" onclick="selectDimension(this, 1440, 1080, '4:3')">
                         4:3
                     </button>
-                    <button class="dimension-btn" onclick="selectDimension(this, 1024, 576, '16:9')">
+                    <button class="dimension-btn" onclick="selectDimension(this, 1920, 1080, '16:9')">
                         16:9
                     </button>
                 </div>
             </div>
             
             <div class="toggle-container">
-                <span class="toggle-label">Better Prompt</span>
+                <span class="toggle-label">Tingkatkan Prompt</span>
                 <div class="toggle-switch" id="betterPromptToggle" onclick="toggleBetterPrompt()">
                     <div class="toggle-slider"></div>
                 </div>
@@ -878,8 +918,8 @@
 
     <script>
         // Global Variables
-        let selectedWidth = 512;
-        let selectedHeight = 512;
+        let selectedWidth = 1080;
+        let selectedHeight = 1080;
         let selectedRatio = '1:1';
         let hasGeneratedImage = false;
         let betterPromptEnabled = false;
@@ -969,6 +1009,46 @@
                     behavior: 'smooth'
                 });
             }, 100);
+        }
+
+        // Add loading animation
+        function addLoadingAnimation() {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message ai';
+            
+            const loadingContainer = document.createElement('div');
+            loadingContainer.className = 'loading-container';
+            
+            const loadingSpinner = document.createElement('div');
+            loadingSpinner.className = 'loading-spinner';
+            
+            const loadingText = document.createElement('div');
+            loadingText.className = 'loading-text';
+            loadingText.textContent = 'Memproses gambar...';
+            
+            const loadingProgress = document.createElement('div');
+            loadingProgress.className = 'loading-progress';
+            
+            const loadingProgressBar = document.createElement('div');
+            loadingProgressBar.className = 'loading-progress-bar';
+            
+            loadingProgress.appendChild(loadingProgressBar);
+            loadingContainer.appendChild(loadingSpinner);
+            loadingContainer.appendChild(loadingText);
+            loadingContainer.appendChild(loadingProgress);
+            messageDiv.appendChild(loadingContainer);
+            chatContainer.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            setTimeout(() => {
+                chatContainer.scrollTo({
+                    top: chatContainer.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }, 100);
+            
+            return messageDiv;
         }
 
         // Add image result
@@ -1156,6 +1236,9 @@
                 let finalPrompt = prompt;
                 let improvedPrompt = null;
                 
+                // Add loading animation
+                const loadingMessage = addLoadingAnimation();
+                
                 // Use Better Prompt if enabled
                 if (betterPromptEnabled) {
                     improvedPrompt = await improvePrompt(prompt);
@@ -1184,6 +1267,9 @@
                 
                 const data = await response.json();
                 
+                // Remove loading animation
+                loadingMessage.remove();
+                
                 if (data.data && data.data.length > 0) {
                     const imageUrl = data.data[0].url;
                     addImageResult(imageUrl, prompt, improvedPrompt);
@@ -1194,6 +1280,11 @@
                 
             } catch (error) {
                 console.error('Error generating image:', error);
+                
+                // Remove loading animation
+                const loadingMessages = document.querySelectorAll('.loading-container');
+                loadingMessages.forEach(msg => msg.closest('.message').remove());
+                
                 showToast(`Gagal membuat gambar: ${error.message}`, 'error');
             } finally {
                 // Re-enable send button
