@@ -16,7 +16,7 @@
             --bg-primary: #000000;
             --bg-secondary: #0f0f0f;
             --bg-tertiary: #1a1a1a;
-            --bg-quaternary: #262626;
+            --bg-quaternary: #252525;
             --text-primary: #ffffff;
             --text-secondary: #a0a0a0;
             --text-tertiary: #808080;
@@ -24,11 +24,12 @@
             --accent-hover: #e0e0e0;
             --border: #333333;
             --message-bg: #1a1a1a;
-            --user-message-bg: #262626;
+            --user-message-bg: #252525;
             --toggle-off: #4a4a4a;
-            --toggle-on: #404040;
+            --toggle-on: #4a4a4a;
             --toggle-slider: #ffffff;
-            --toast-bg: #404040;
+            --toast-bg: #333333;
+            --toast-text: #ffffff;
         }
 
         body {
@@ -82,8 +83,8 @@
         .logo-icon {
             width: 32px;
             height: 32px;
-            background-color: var(--bg-quaternary);
-            color: var(--text-primary);
+            background-color: var(--accent);
+            color: var(--bg-primary);
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -105,7 +106,7 @@
         .status-indicator {
             width: 8px;
             height: 8px;
-            background-color: var(--text-secondary);
+            background-color: var(--accent);
             border-radius: 50%;
             animation: pulse 2s infinite;
             flex-shrink: 0;
@@ -122,7 +123,7 @@
             flex: 1;
             overflow-y: auto;
             padding: 16px;
-            padding-bottom: 70px;
+            padding-bottom: 90px; /* Increased padding for consistency */
             margin-top: 64px;
             width: 100%;
             box-sizing: border-box;
@@ -160,7 +161,12 @@
             font-size: clamp(24px, 8vw, 32px);
             font-weight: 700;
             text-align: center;
-            color: var(--text-primary);
+            background: linear-gradient(90deg, #ffffff, #a0a0a0, #ffffff);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine 3s linear infinite;
             opacity: 0;
             transform: translateY(20px);
             animation-fill-mode: forwards;
@@ -184,6 +190,12 @@
             max-width: 90%;
         }
 
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -201,6 +213,7 @@
             flex-direction: column;
             gap: 16px;
             width: 100%;
+            padding-bottom: 16px; /* Add padding at the bottom */
         }
 
         .message {
@@ -243,7 +256,7 @@
 
         .message.user .message-bubble {
             background-color: var(--user-message-bg);
-            color: var(--text-primary);
+            color: white;
             border-bottom-right-radius: 4px;
         }
 
@@ -318,10 +331,10 @@
         .action-btn {
             width: 40px;
             height: 40px;
-            background-color: rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 50%;
-            color: var(--text-primary);
+            color: white;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -332,7 +345,7 @@
         }
 
         .action-btn:hover {
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: rgba(0, 0, 0, 0.95);
             transform: scale(1.1);
         }
 
@@ -355,11 +368,6 @@
             background-color: rgba(15, 15, 15, 0.95);
             width: 100%;
             box-sizing: border-box;
-            transition: transform 0.3s ease;
-        }
-
-        .input-area.keyboard-open {
-            transform: translateY(calc(-1 * env(safe-area-inset-bottom, 0px)));
         }
 
         .input-wrapper {
@@ -377,8 +385,8 @@
         }
 
         .input-wrapper:focus-within {
-            border-color: var(--text-primary);
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+            border-color: var(--toggle-on);
+            box-shadow: 0 0 0 2px rgba(224, 224, 224, 0.3);
         }
 
         .prompt-input {
@@ -421,8 +429,8 @@
         }
 
         .settings-btn:hover {
-            color: var(--text-primary);
-            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--accent);
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
         .settings-btn:active {
@@ -432,8 +440,8 @@
         .send-btn {
             width: 36px;
             height: 36px;
-            background-color: var(--bg-quaternary);
-            color: var(--text-primary);
+            background-color: var(--accent);
+            color: var(--bg-primary);
             border: none;
             border-radius: 50%;
             cursor: pointer;
@@ -446,9 +454,9 @@
         }
 
         .send-btn:hover {
-            background-color: var(--toggle-on);
+            background-color: var(--accent-hover);
             transform: scale(1.05);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
         }
 
         .send-btn:active {
@@ -456,7 +464,7 @@
         }
 
         .send-btn:disabled {
-            background-color: var(--bg-tertiary);
+            background-color: var(--bg-quaternary);
             color: var(--text-tertiary);
             cursor: not-allowed;
         }
@@ -550,7 +558,7 @@
 
         .close-btn:hover {
             color: var(--text-primary);
-            background-color: rgba(255, 255, 255, 0.05);
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
         .setting-group {
@@ -580,8 +588,8 @@
         }
 
         .setting-input:focus {
-            border-color: var(--text-primary);
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+            border-color: var(--toggle-on);
+            box-shadow: 0 0 0 2px rgba(224, 224, 224, 0.3);
         }
 
         .dimension-options {
@@ -606,9 +614,9 @@
         }
 
         .dimension-btn.active {
-            background-color: var(--toggle-on);
-            color: var(--text-primary);
-            border-color: var(--toggle-on);
+            background-color: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
             transform: scale(1.02);
         }
 
@@ -671,17 +679,17 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Toast Notification */
+        /* Toast Notification - Updated to gray theme */
         .toast {
             position: fixed;
             bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
             background-color: var(--toast-bg);
-            color: var(--text-primary);
+            color: var(--toast-text);
             padding: 12px 24px;
             border-radius: 24px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
             opacity: 0;
             transition: all 0.3s ease;
             z-index: 1000;
@@ -709,6 +717,16 @@
             }
         }
 
+        .toast.error {
+            background-color: #4a4a4a;
+            color: var(--toast-text);
+        }
+
+        .toast.success {
+            background-color: #4a4a4a;
+            color: var(--toast-text);
+        }
+
         /* Touch-friendly buttons */
         @media (hover: none) {
             .image-actions {
@@ -725,7 +743,7 @@
         @media (max-width: 768px) {
             .main-content {
                 padding: 12px;
-                padding-bottom: 80px;
+                padding-bottom: 100px; /* Increased for mobile */
                 margin-top: 60px;
             }
             
@@ -749,7 +767,7 @@
 
         @media (max-width: 380px) {
             .main-content {
-                padding-bottom: 75px;
+                padding-bottom: 95px;
             }
             
             .input-area {
@@ -799,7 +817,7 @@
         </main>
 
         <!-- Input Area - Redesigned with center alignment -->
-        <div class="input-area" id="inputArea">
+        <div class="input-area">
             <div class="input-wrapper">
                 <button class="settings-btn" onclick="openSettings()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -846,14 +864,14 @@
                     <button class="dimension-btn" onclick="selectDimension(this, 1024, 768, '4:3')">
                         4:3
                     </button>
-                    <button class="dimension-btn" onclick="selectDimension(this, 1366, 768, '16:9')">
+                    <button class="dimension-btn" onclick="selectDimension(this, 1024, 578, '16:9')">
                         16:9
                     </button>
                 </div>
             </div>
             
             <div class="toggle-container">
-                <span class="toggle-label">Better Prompt</span>
+                <span class="toggle-label">Tingkatkan Prompt</span>
                 <div class="toggle-switch" id="betterPromptToggle" onclick="toggleBetterPrompt()">
                     <div class="toggle-slider"></div>
                 </div>
@@ -1210,8 +1228,8 @@
             
             // Animate welcome title
             const welcomeTitle = document.querySelector('.welcome-title');
-            welcomeTitle.style.animation = 'fadeInUp 1s ease-out forwards';
-            welcomeTitle.style.animationDelay = '0s';
+            welcomeTitle.style.animation = 'fadeInUp 1s ease-out forwards, shine 3s linear infinite';
+            welcomeTitle.style.animationDelay = '0s, 1s';
             
             // Animate subtitle
             const welcomeSubtitle = document.querySelector('.welcome-subtitle');
@@ -1238,34 +1256,6 @@
                         chatContainer.scrollTop = chatContainer.scrollHeight;
                     }
                 }, 100);
-            });
-            
-            // Handle virtual keyboard
-            const inputArea = document.getElementById('inputArea');
-            const inputWrapper = document.querySelector('.input-wrapper');
-            
-            // Detect when virtual keyboard appears
-            promptInput.addEventListener('focus', function() {
-                // Add a small delay to ensure the keyboard has appeared
-                setTimeout(function() {
-                    inputArea.classList.add('keyboard-open');
-                    
-                    // Scroll to bottom if needed
-                    const chatContainer = document.getElementById('chatContainer');
-                    if (chatContainer.style.display !== 'none') {
-                        setTimeout(() => {
-                            chatContainer.scrollTop = chatContainer.scrollHeight;
-                        }, 300);
-                    }
-                }, 300);
-            });
-            
-            // Detect when virtual keyboard disappears
-            promptInput.addEventListener('blur', function() {
-                // Add a small delay to ensure the keyboard has disappeared
-                setTimeout(function() {
-                    inputArea.classList.remove('keyboard-open');
-                }, 300);
             });
             
             // Prevent zoom on double tap
