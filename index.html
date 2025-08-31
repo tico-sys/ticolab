@@ -29,7 +29,7 @@
             background-color: var(--bg-primary);
             color: var(--text-primary);
             height: 100vh;
-            height: 100dvh; /* Dynamic viewport height */
+            height: 100dvh;
             overflow: hidden;
             position: fixed;
             width: 100%;
@@ -39,7 +39,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-            height: 100dvh; /* Dynamic viewport height */
+            height: 100dvh;
             max-width: 100%;
             margin: 0 auto;
         }
@@ -162,6 +162,7 @@
             overflow: hidden;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
             position: relative;
+            margin-top: 8px;
         }
 
         .image-result img {
@@ -177,29 +178,36 @@
             display: flex;
             gap: 8px;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity 0.3s ease;
         }
 
+        .image-result:active .image-actions,
         .image-result:hover .image-actions {
             opacity: 1;
         }
 
         .action-btn {
-            width: 36px;
-            height: 36px;
-            background-color: rgba(0, 0, 0, 0.7);
-            border: none;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 50%;
             color: white;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
 
         .action-btn:hover {
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: rgba(0, 0, 0, 0.95);
+            transform: scale(1.1);
+        }
+
+        .action-btn:active {
+            transform: scale(0.95);
         }
 
         /* Input Area */
@@ -212,7 +220,7 @@
             border-top: 1px solid var(--border);
             padding: 12px 16px;
             z-index: 100;
-            padding-bottom: env(safe-area-inset-bottom, 12px); /* Handle safe area for notched devices */
+            padding-bottom: env(safe-area-inset-bottom, 12px);
         }
 
         .input-container {
@@ -437,6 +445,18 @@
             color: white;
         }
 
+        /* Touch-friendly buttons */
+        @media (hover: none) {
+            .image-actions {
+                opacity: 1;
+            }
+            
+            .action-btn {
+                width: 44px;
+                height: 44px;
+            }
+        }
+
         /* Responsive */
         @media (max-width: 380px) {
             .header {
@@ -544,7 +564,6 @@
         // Global Variables
         let selectedWidth = 768;
         let selectedHeight = 768;
-        let currentApiKeyIndex = 0;
 
         // Auto-resize textarea
         function autoResize(textarea) {
@@ -634,9 +653,26 @@
                     <line x1="12" y1="15" x2="12" y2="3"></line>
                 </svg>
             `;
+            downloadBtn.title = 'Unduh gambar';
             downloadBtn.onclick = () => downloadImage(imageUrl, prompt);
             
+            // Add share button for mobile
+            const shareBtn = document.createElement('button');
+            shareBtn.className = 'action-btn';
+            shareBtn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg>
+            `;
+            shareBtn.title = 'Bagikan';
+            shareBtn.onclick = () => shareImage(imageUrl, prompt);
+            
             actionsDiv.appendChild(downloadBtn);
+            actionsDiv.appendChild(shareBtn);
             imageContainer.appendChild(img);
             imageContainer.appendChild(actionsDiv);
             
@@ -648,26 +684,97 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        // Download image
+        // Download image using serverless function
         async function downloadImage(imageUrl, prompt) {
             try {
-                // Create a temporary link to download the image
+                showToast('Mengunduh gambar...', 'info');
+                
+                // Call our download serverless function
+                const response = await fetch('/api/download', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        imageUrl: imageUrl,
+                        filename: generateFilename(prompt)
+                    }),
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to download image');
+                }
+                
+                // Get the blob from response
+                const blob = await response.blob();
+                
+                // Create a temporary URL for the blob
+                const url = window.URL.createObjectURL(blob);
+                
+                // Create a temporary link element
                 const a = document.createElement('a');
-                a.href = imageUrl;
-                a.download = `tico-image-${Date.now()}.png`;
-                a.target = '_blank';
+                a.href = url;
+                a.download = generateFilename(prompt);
+                
+                // Append to body, click, and remove
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
                 
+                // Revoke the blob URL to free memory
+                window.URL.revokeObjectURL(url);
+                
                 showToast('Gambar berhasil diunduh!', 'success');
             } catch (error) {
                 console.error('Download error:', error);
-                showToast('Gagal mengunduh gambar', 'error');
+                
+                // Fallback: open image in new tab
+                try {
+                    const newWindow = window.open(imageUrl, '_blank');
+                    if (newWindow) {
+                        showToast('Gambar dibuka di tab baru', 'success');
+                    } else {
+                        showToast('Gagal mengunduh. Silakan klik kanan pada gambar dan pilih "Save image"', 'error');
+                    }
+                } catch (fallbackError) {
+                    showToast('Gagal mengunduh gambar', 'error');
+                }
             }
         }
 
-        // Generate Image - Fixed according to the example
+        // Generate filename from prompt
+        function generateFilename(prompt) {
+            const sanitizedPrompt = prompt.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            return `tico-${sanitizedPrompt}-${timestamp}.png`;
+        }
+
+        // Share image function
+        async function shareImage(imageUrl, prompt) {
+            try {
+                if (navigator.share) {
+                    // Fetch image as blob
+                    const response = await fetch(imageUrl);
+                    const blob = await response.blob();
+                    const file = new File([blob], 'tico-image.png', { type: blob.type });
+                    
+                    await navigator.share({
+                        title: 'Tico Image Lab',
+                        text: `Gambar: ${prompt}`,
+                        files: [file]
+                    });
+                } else {
+                    // Fallback: copy URL to clipboard
+                    await navigator.clipboard.writeText(imageUrl);
+                    showToast('Link gambar disalin ke clipboard', 'success');
+                }
+            } catch (error) {
+                console.error('Share error:', error);
+                showToast('Gagal membagikan gambar', 'error');
+            }
+        }
+
+        // Generate Image
         async function generateImage() {
             const input = document.getElementById('promptInput');
             const sendBtn = document.getElementById('sendBtn');
@@ -692,7 +799,7 @@
             try {
                 showToast('Membuat gambar...', 'info');
                 
-                // Call our serverless function to get the API key and generate image
+                // Call our serverless function
                 const response = await fetch('/api/generate', {
                     method: 'POST',
                     headers: {
