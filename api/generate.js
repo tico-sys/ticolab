@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { prompt, width = 512, height = 512 } = req.body;
+    const { prompt, width = 768, height = 768 } = req.body;
     
     if (!prompt) {
       return res.status(400).json({ error: 'Prompt is required' });
@@ -30,20 +30,19 @@ export default async function handler(req, res) {
 
     console.log(`Using API key ${keyIndex + 1} of ${apiKeys.length}`);
 
-    // Make request to Together API
-    const response = await fetch('https://api.together.xyz/v1/images/generations', {
-      method: 'POST',
+    // Make request to Together API - Fixed according to the example
+    const response = await fetch("https://api.together.xyz/v1/images/generations", {
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         model: "black-forest-labs/FLUX.1-schnell-Free",
         prompt: prompt,
         width: parseInt(width),
-        height: parseInt(height),
-        response_format: "url"
-      }),
+        height: parseInt(height)
+      })
     });
 
     if (!response.ok) {
@@ -57,21 +56,18 @@ export default async function handler(req, res) {
         
         console.log(`Retrying with API key ${nextKeyIndex + 1}`);
         
-        const retryResponse = await fetch('https://api.together.xyz/v1/images/generations', {
-          method: 'POST',
+        const retryResponse = await fetch("https://api.together.xyz/v1/images/generations", {
+          method: "POST",
           headers: {
-            'Authorization': `Bearer ${nextApiKey}`,
-            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${nextApiKey}`,
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({
             model: "black-forest-labs/FLUX.1-schnell-Free",
             prompt: prompt,
             width: parseInt(width),
-            height: parseInt(height),
-            steps: 4,
-            n: 1,
-            response_format: "url"
-          }),
+            height: parseInt(height)
+          })
         });
         
         if (!retryResponse.ok) {
