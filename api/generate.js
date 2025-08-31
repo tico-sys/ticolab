@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { prompt, width = 1080, height = 1080 } = req.body;
+    const { prompt, width = 768, height = 768 } = req.body;
     
     if (!prompt) {
       return res.status(400).json({ error: 'Prompt is required' });
