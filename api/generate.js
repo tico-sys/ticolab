@@ -42,8 +42,6 @@ export default async function handler(req, res) {
         prompt: prompt,
         width: parseInt(width),
         height: parseInt(height),
-        steps: 4,
-        n: 1,
         response_format: "url"
       }),
     });
