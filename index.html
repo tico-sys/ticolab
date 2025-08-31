@@ -16,17 +16,19 @@
             --bg-primary: #000000;
             --bg-secondary: #0f0f0f;
             --bg-tertiary: #1a1a1a;
+            --bg-quaternary: #262626;
             --text-primary: #ffffff;
             --text-secondary: #a0a0a0;
+            --text-tertiary: #808080;
             --accent: #ffffff;
             --accent-hover: #e0e0e0;
             --border: #333333;
             --message-bg: #1a1a1a;
-            --user-message-bg: #333333;
+            --user-message-bg: #262626;
             --toggle-off: #4a4a4a;
-            --toggle-on: #4a4a4a;
+            --toggle-on: #404040;
             --toggle-slider: #ffffff;
-            --toast-bg: #2a2a2a;
+            --toast-bg: #404040;
         }
 
         body {
@@ -80,8 +82,8 @@
         .logo-icon {
             width: 32px;
             height: 32px;
-            background: linear-gradient(135deg, var(--accent), #cccccc);
-            color: var(--bg-primary);
+            background-color: var(--bg-quaternary);
+            color: var(--text-primary);
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -103,7 +105,7 @@
         .status-indicator {
             width: 8px;
             height: 8px;
-            background-color: var(--accent);
+            background-color: var(--text-secondary);
             border-radius: 50%;
             animation: pulse 2s infinite;
             flex-shrink: 0;
@@ -158,12 +160,7 @@
             font-size: clamp(24px, 8vw, 32px);
             font-weight: 700;
             text-align: center;
-            background: linear-gradient(90deg, #ffffff, #a0a0a0, #ffffff);
-            background-size: 200% auto;
-            color: transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            animation: shine 3s linear infinite;
+            color: var(--text-primary);
             opacity: 0;
             transform: translateY(20px);
             animation-fill-mode: forwards;
@@ -185,12 +182,6 @@
             word-wrap: break-word;
             overflow-wrap: break-word;
             max-width: 90%;
-        }
-
-        @keyframes shine {
-            to {
-                background-position: 200% center;
-            }
         }
 
         @keyframes fadeInUp {
@@ -252,7 +243,7 @@
 
         .message.user .message-bubble {
             background-color: var(--user-message-bg);
-            color: white;
+            color: var(--text-primary);
             border-bottom-right-radius: 4px;
         }
 
@@ -327,10 +318,10 @@
         .action-btn {
             width: 40px;
             height: 40px;
-            background-color: rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            color: white;
+            color: var(--text-primary);
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -341,61 +332,12 @@
         }
 
         .action-btn:hover {
-            background-color: rgba(0, 0, 0, 0.95);
+            background-color: rgba(0, 0, 0, 0.9);
             transform: scale(1.1);
         }
 
         .action-btn:active {
             transform: scale(0.95);
-        }
-
-        /* Loading Animation */
-        .loading-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            width: 100%;
-        }
-
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            border-top-color: var(--accent);
-            animation: spin 1s linear infinite;
-            margin-bottom: 12px;
-        }
-
-        .loading-text {
-            color: var(--text-secondary);
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .loading-progress {
-            width: 200px;
-            height: 4px;
-            background-color: var(--bg-tertiary);
-            border-radius: 2px;
-            margin-top: 12px;
-            overflow: hidden;
-        }
-
-        .loading-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), #cccccc);
-            border-radius: 2px;
-            width: 0%;
-            animation: loadingProgress 3s ease-in-out infinite;
-        }
-
-        @keyframes loadingProgress {
-            0% { width: 0%; }
-            50% { width: 70%; }
-            100% { width: 100%; }
         }
 
         /* Input Area - Redesigned with better alignment */
@@ -413,6 +355,11 @@
             background-color: rgba(15, 15, 15, 0.95);
             width: 100%;
             box-sizing: border-box;
+            transition: transform 0.3s ease;
+        }
+
+        .input-area.keyboard-open {
+            transform: translateY(calc(-1 * env(safe-area-inset-bottom, 0px)));
         }
 
         .input-wrapper {
@@ -430,8 +377,8 @@
         }
 
         .input-wrapper:focus-within {
-            border-color: var(--toggle-on);
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+            border-color: var(--text-primary);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
         }
 
         .prompt-input {
@@ -474,8 +421,8 @@
         }
 
         .settings-btn:hover {
-            color: var(--accent);
-            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            background-color: rgba(255, 255, 255, 0.05);
         }
 
         .settings-btn:active {
@@ -485,8 +432,8 @@
         .send-btn {
             width: 36px;
             height: 36px;
-            background: linear-gradient(135deg, var(--accent), #cccccc);
-            color: var(--bg-primary);
+            background-color: var(--bg-quaternary);
+            color: var(--text-primary);
             border: none;
             border-radius: 50%;
             cursor: pointer;
@@ -499,8 +446,9 @@
         }
 
         .send-btn:hover {
+            background-color: var(--toggle-on);
             transform: scale(1.05);
-            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
         .send-btn:active {
@@ -508,8 +456,8 @@
         }
 
         .send-btn:disabled {
-            background: linear-gradient(135deg, var(--bg-tertiary), #2a2a2a);
-            color: var(--text-secondary);
+            background-color: var(--bg-tertiary);
+            color: var(--text-tertiary);
             cursor: not-allowed;
         }
 
@@ -602,7 +550,7 @@
 
         .close-btn:hover {
             color: var(--text-primary);
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.05);
         }
 
         .setting-group {
@@ -632,8 +580,8 @@
         }
 
         .setting-input:focus {
-            border-color: var(--toggle-on);
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+            border-color: var(--text-primary);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
         }
 
         .dimension-options {
@@ -658,8 +606,8 @@
         }
 
         .dimension-btn.active {
-            background: linear-gradient(135deg, var(--toggle-on), #f0f0f0);
-            color: var(--bg-primary);
+            background-color: var(--toggle-on);
+            color: var(--text-primary);
             border-color: var(--toggle-on);
             transform: scale(1.02);
         }
@@ -733,7 +681,7 @@
             color: var(--text-primary);
             padding: 12px 24px;
             border-radius: 24px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             opacity: 0;
             transition: all 0.3s ease;
             z-index: 1000;
@@ -851,7 +799,7 @@
         </main>
 
         <!-- Input Area - Redesigned with center alignment -->
-        <div class="input-area">
+        <div class="input-area" id="inputArea">
             <div class="input-wrapper">
                 <button class="settings-btn" onclick="openSettings()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -889,23 +837,23 @@
             <div class="setting-group">
                 <label class="setting-label">Rasio Aspek</label>
                 <div class="dimension-options">
-                    <button class="dimension-btn active" onclick="selectDimension(this, 1080, 1080, '1:1')">
+                    <button class="dimension-btn active" onclick="selectDimension(this, 768, 768, '1:1')">
                         1:1
                     </button>
-                    <button class="dimension-btn" onclick="selectDimension(this, 1080, 1440, '3:4')">
+                    <button class="dimension-btn" onclick="selectDimension(this, 768, 1024, '3:4')">
                         3:4
                     </button>
-                    <button class="dimension-btn" onclick="selectDimension(this, 1440, 1080, '4:3')">
+                    <button class="dimension-btn" onclick="selectDimension(this, 1024, 768, '4:3')">
                         4:3
                     </button>
-                    <button class="dimension-btn" onclick="selectDimension(this, 1920, 1080, '16:9')">
+                    <button class="dimension-btn" onclick="selectDimension(this, 1366, 768, '16:9')">
                         16:9
                     </button>
                 </div>
             </div>
             
             <div class="toggle-container">
-                <span class="toggle-label">Tingkatkan Prompt</span>
+                <span class="toggle-label">Better Prompt</span>
                 <div class="toggle-switch" id="betterPromptToggle" onclick="toggleBetterPrompt()">
                     <div class="toggle-slider"></div>
                 </div>
@@ -918,8 +866,8 @@
 
     <script>
         // Global Variables
-        let selectedWidth = 1080;
-        let selectedHeight = 1080;
+        let selectedWidth = 768;
+        let selectedHeight = 768;
         let selectedRatio = '1:1';
         let hasGeneratedImage = false;
         let betterPromptEnabled = false;
@@ -1009,46 +957,6 @@
                     behavior: 'smooth'
                 });
             }, 100);
-        }
-
-        // Add loading animation
-        function addLoadingAnimation() {
-            const chatContainer = document.getElementById('chatContainer');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message ai';
-            
-            const loadingContainer = document.createElement('div');
-            loadingContainer.className = 'loading-container';
-            
-            const loadingSpinner = document.createElement('div');
-            loadingSpinner.className = 'loading-spinner';
-            
-            const loadingText = document.createElement('div');
-            loadingText.className = 'loading-text';
-            loadingText.textContent = 'Memproses gambar...';
-            
-            const loadingProgress = document.createElement('div');
-            loadingProgress.className = 'loading-progress';
-            
-            const loadingProgressBar = document.createElement('div');
-            loadingProgressBar.className = 'loading-progress-bar';
-            
-            loadingProgress.appendChild(loadingProgressBar);
-            loadingContainer.appendChild(loadingSpinner);
-            loadingContainer.appendChild(loadingText);
-            loadingContainer.appendChild(loadingProgress);
-            messageDiv.appendChild(loadingContainer);
-            chatContainer.appendChild(messageDiv);
-            
-            // Scroll to bottom
-            setTimeout(() => {
-                chatContainer.scrollTo({
-                    top: chatContainer.scrollHeight,
-                    behavior: 'smooth'
-                });
-            }, 100);
-            
-            return messageDiv;
         }
 
         // Add image result
@@ -1236,9 +1144,6 @@
                 let finalPrompt = prompt;
                 let improvedPrompt = null;
                 
-                // Add loading animation
-                const loadingMessage = addLoadingAnimation();
-                
                 // Use Better Prompt if enabled
                 if (betterPromptEnabled) {
                     improvedPrompt = await improvePrompt(prompt);
@@ -1267,9 +1172,6 @@
                 
                 const data = await response.json();
                 
-                // Remove loading animation
-                loadingMessage.remove();
-                
                 if (data.data && data.data.length > 0) {
                     const imageUrl = data.data[0].url;
                     addImageResult(imageUrl, prompt, improvedPrompt);
@@ -1280,11 +1182,6 @@
                 
             } catch (error) {
                 console.error('Error generating image:', error);
-                
-                // Remove loading animation
-                const loadingMessages = document.querySelectorAll('.loading-container');
-                loadingMessages.forEach(msg => msg.closest('.message').remove());
-                
                 showToast(`Gagal membuat gambar: ${error.message}`, 'error');
             } finally {
                 // Re-enable send button
@@ -1313,8 +1210,8 @@
             
             // Animate welcome title
             const welcomeTitle = document.querySelector('.welcome-title');
-            welcomeTitle.style.animation = 'fadeInUp 1s ease-out forwards, shine 3s linear infinite';
-            welcomeTitle.style.animationDelay = '0s, 1s';
+            welcomeTitle.style.animation = 'fadeInUp 1s ease-out forwards';
+            welcomeTitle.style.animationDelay = '0s';
             
             // Animate subtitle
             const welcomeSubtitle = document.querySelector('.welcome-subtitle');
@@ -1341,6 +1238,34 @@
                         chatContainer.scrollTop = chatContainer.scrollHeight;
                     }
                 }, 100);
+            });
+            
+            // Handle virtual keyboard
+            const inputArea = document.getElementById('inputArea');
+            const inputWrapper = document.querySelector('.input-wrapper');
+            
+            // Detect when virtual keyboard appears
+            promptInput.addEventListener('focus', function() {
+                // Add a small delay to ensure the keyboard has appeared
+                setTimeout(function() {
+                    inputArea.classList.add('keyboard-open');
+                    
+                    // Scroll to bottom if needed
+                    const chatContainer = document.getElementById('chatContainer');
+                    if (chatContainer.style.display !== 'none') {
+                        setTimeout(() => {
+                            chatContainer.scrollTop = chatContainer.scrollHeight;
+                        }, 300);
+                    }
+                }, 300);
+            });
+            
+            // Detect when virtual keyboard disappears
+            promptInput.addEventListener('blur', function() {
+                // Add a small delay to ensure the keyboard has disappeared
+                setTimeout(function() {
+                    inputArea.classList.remove('keyboard-open');
+                }, 300);
             });
             
             // Prevent zoom on double tap
