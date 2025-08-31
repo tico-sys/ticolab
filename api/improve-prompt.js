@@ -63,4 +63,4 @@ Improved prompt:`;
     console.error('Error in improve-prompt function:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
-                                }
+}
