@@ -30,7 +30,7 @@ export default async function handler(req, res) {
 
     console.log(`Using API key ${keyIndex + 1} of ${apiKeys.length}`);
 
-    // Make request to Together API - Fixed according to the example
+    // Make request to Together API
     const response = await fetch("https://api.together.xyz/v1/images/generations", {
       method: "POST",
       headers: {
